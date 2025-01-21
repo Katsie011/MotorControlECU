@@ -5,7 +5,7 @@
 Servo myServo;
 
 // Global variables
-int newPos = 0;          // Variable to store new position for the servo
+int degrees = 0;          // Variable to store new position for the servo
 bool led_status = false; // LED status flag
 String data = "";        // String to store data from serial input
 String command = "";     // String to store command from serial input
@@ -46,6 +46,8 @@ void setup()
 
     Serial.println("Ready! Let's go!");
     help(); // Display available commands
+    Serial.println();
+    printBar();
 }
 
 void loop()
@@ -70,9 +72,12 @@ void loop()
             // Extract data and command from the input string
             data = command.substring(pos + 1);
             data.trim();
+            degrees = data.toInt();
+
             command = command.substring(0, pos);
             command.trim();
             command.toUpperCase();
+
 
             // Echo the command and data for the user
             Serial.print("\t- Command: ");
@@ -99,16 +104,17 @@ void loop()
         {
             Serial.println("Running!");
         }
-        else if (command.startsWith("MOVE"))
+        else if (command.startsWith("MOVE") && degrees >0)
         {
             // Convert data to an integer and constrain it between 0 and 180
-            int pos = data.toInt();
-            pos = constrain(pos, 0, 180);
-            myServo.write(pos);
+            degrees = constrain(degrees, 0, 180);
+            myServo.write(degrees);
             digitalWrite(LED_BUILTIN, led_status);
             led_status = !led_status;
             Serial.print("Moved to: ");
-            Serial.println(pos);
+            Serial.println(degrees);
+
+            degrees = -1;
         }
         else if (command == "FLASH")
         {
