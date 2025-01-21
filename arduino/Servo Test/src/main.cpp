@@ -104,7 +104,7 @@ void loop()
         {
             Serial.println("Running!");
         }
-        else if (command.startsWith("MOVE") && degrees >0)
+        else if (command.startsWith("MOVE") && degrees >=0)
         {
             // Convert data to an integer and constrain it between 0 and 180
             degrees = constrain(degrees, 0, 180);
