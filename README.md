@@ -1,6 +1,3 @@
----
-title: Overarching plan for the system
----
 # Overarching plan for the system
 
 
