@@ -116,6 +116,13 @@ void loop()
             // enable fuel
             bl_fuel_on = true;
             digitalWrite(PIN_FUEL, true);
+            // delay to allow time for fuel to move through the system
+            for (int c = 0; c < 5; c++)
+            {
+                digitalWrite(LED_BUILTIN, true);
+                delay(250);
+                digitalWrite(LED_BUILTIN, false);
+            }
 
             // Turn on starter motor
             digitalWrite(PIN_START, true);
