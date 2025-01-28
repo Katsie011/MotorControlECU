@@ -1,11 +1,14 @@
 #include <Arduino.h>
 #include <Servo.h>
 
+#define MAX_POS 80
+#define MIN_POS 40
+
 // Create a Servo object to control a servo motor
 Servo myServo;
 
 // Global variables
-int degrees = 0;          // Variable to store new position for the servo
+int degrees = MIN_POS;   // Variable to store new position for the servo
 bool led_status = false; // LED status flag
 String data = "";        // String to store data from serial input
 String command = "";     // String to store command from serial input
@@ -13,6 +16,7 @@ String command = "";     // String to store command from serial input
 // Function declarations
 void help();
 void printBar();
+void sweep(int bottom, int top);
 
 void setup()
 {
@@ -26,23 +30,7 @@ void setup()
     // Attach the servo on pin A0 to the servo object
     myServo.attach(A0);
 
-    // Sweep the servo from 0 to 180 degrees
-    for (int pos = 0; pos <= 180; pos += 5)
-    {
-        myServo.write(pos);
-        digitalWrite(LED_BUILTIN, led_status);
-        led_status = !led_status;
-        delay(15); // Wait 15 milliseconds for the servo to reach the position
-    }
-
-    // Sweep the servo back from 180 to 0 degrees
-    for (int pos = 180; pos >= 0; pos -= 5)
-    {
-        myServo.write(pos);
-        digitalWrite(LED_BUILTIN, led_status);
-        led_status = !led_status;
-        delay(15); // Wait 15 milliseconds for the servo to reach the position
-    }
+    sweep(MIN_POS, MAX_POS);
 
     Serial.println("Ready! Let's go!");
     help(); // Display available commands
@@ -61,23 +49,22 @@ void loop()
         Serial.println("Received:");
 
         // Find the position of the delimiter ':' or whitespace
-        int pos = command.indexOf(':');
-        if (pos < 0)
+        int delim_pos = command.indexOf(':');
+        if (delim_pos < 0)
         {
-            pos = command.indexOf(' ');
+            delim_pos = command.indexOf(' ');
         }
 
-        if (pos > 0)
+        if (delim_pos > 0)
         {
             // Extract data and command from the input string
-            data = command.substring(pos + 1);
+            data = command.substring(delim_pos + 1);
             data.trim();
             degrees = data.toInt();
 
-            command = command.substring(0, pos);
+            command = command.substring(0, delim_pos);
             command.trim();
             command.toUpperCase();
-
 
             // Echo the command and data for the user
             Serial.print("\t- Command: ");
@@ -104,7 +91,7 @@ void loop()
         {
             Serial.println("Running!");
         }
-        else if (command.startsWith("MOVE") && degrees >=0)
+        else if (command.startsWith("MOVE") && degrees >= 0)
         {
             // Convert data to an integer and constrain it between 0 and 180
             degrees = constrain(degrees, 0, 180);
@@ -126,6 +113,10 @@ void loop()
                 digitalWrite(LED_BUILTIN, LOW);
                 delay(300);
             }
+        }
+        else if (command == "SWEEP")
+        {
+            sweep(MIN_POS, MAX_POS);
         }
         else
         {
@@ -158,4 +149,26 @@ void printBar()
         Serial.print("#");
     }
     Serial.println();
+}
+
+void sweep(int bottom, int top)
+{
+
+    // Sweep the servo from 0 to 180 degrees
+    for (int step = bottom; step <= top; step += 1)
+    {
+        myServo.write(step);
+        digitalWrite(LED_BUILTIN, led_status);
+        led_status = !led_status;
+        delay(15); // Wait 15 milliseconds for the servo to reach the position
+    }
+
+    // Sweep the servo back from 180 to 0 degrees
+    for (int step = top; step >= bottom; step -= 1)
+    {
+        myServo.write(step);
+        digitalWrite(LED_BUILTIN, led_status);
+        led_status = !led_status;
+        delay(15); // Wait 15 milliseconds for the servo to reach the position
+    }
 }
