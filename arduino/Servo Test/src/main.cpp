@@ -8,7 +8,7 @@
 Servo myServo;
 
 // PIN MAP
-#define PIN_SERVO A0
+// #define PIN_SERVO A0
 #define PIN_START PIN0
 #define PIN_FUEL PIN1
 
@@ -33,6 +33,9 @@ state current_state = OFF;
 void help();
 void printBar();
 void sweep(int bottom, int top);
+int move(int target);
+int move_percent(int percent);
+void start_engine();
 
 void setup()
 {
@@ -47,9 +50,9 @@ void setup()
     Serial.println("Setting up");
 
     // Attach the servo on pin A0 to the servo object
-    myServo.attach(PIN_SERVO);
+    myServo.attach(A0);
 
-    sweep(MIN_POS, MAX_POS);
+    sweep(0, 100);
 
     Serial.println("Ready! Let's go!");
     help(); // Display available commands
@@ -108,32 +111,7 @@ void loop()
         // Handle different commands
         if (command == "START")
         {
-            Serial.println("Running!");
-
-            // TODO Complete this.
-            current_state = STARTING;
-
-            // enable fuel
-            bl_fuel_on = true;
-            digitalWrite(PIN_FUEL, true);
-            // delay to allow time for fuel to move through the system
-            for (int c = 0; c < 5; c++)
-            {
-                digitalWrite(LED_BUILTIN, true);
-                delay(250);
-                digitalWrite(LED_BUILTIN, false);
-            }
-
-            // Turn on starter motor
-            digitalWrite(PIN_START, true);
-
-            // wait two seconds
-            digitalWrite(LED_BUILTIN, true);
-            delay(2000);
-            digitalWrite(LED_BUILTIN, false);
-
-            // turn off starter motor
-            digitalWrite(PIN_START, false);
+            start_engine();
         }
         else if (command == "FUEL")
         {
@@ -144,8 +122,7 @@ void loop()
         else if (command.startsWith("MOVE") && degrees >= 0)
         {
             // Convert data to an integer and constrain it between 0 and 180
-            degrees = constrain(degrees, 0, 180);
-            myServo.write(degrees);
+            degrees = move_percent(degrees);
             digitalWrite(LED_BUILTIN, led_status);
             led_status = !led_status;
             Serial.print("Moved to: ");
@@ -166,7 +143,7 @@ void loop()
         }
         else if (command == "SWEEP")
         {
-            sweep(MIN_POS, MAX_POS);
+            sweep(0, 100);
         }
         else
         {
@@ -207,7 +184,7 @@ void sweep(int bottom, int top)
     // Sweep the servo from 0 to 180 degrees
     for (int step = bottom; step <= top; step += 1)
     {
-        myServo.write(step);
+        move_percent(step);
         digitalWrite(LED_BUILTIN, led_status);
         led_status = !led_status;
         delay(15); // Wait 15 milliseconds for the servo to reach the position
@@ -216,9 +193,52 @@ void sweep(int bottom, int top)
     // Sweep the servo back from 180 to 0 degrees
     for (int step = top; step >= bottom; step -= 1)
     {
-        myServo.write(step);
+        move_percent(step);
         digitalWrite(LED_BUILTIN, led_status);
         led_status = !led_status;
         delay(15); // Wait 15 milliseconds for the servo to reach the position
     }
+}
+
+int move(int target)
+{
+    // degrees = constrain(MAX_POS-target, MIN_POS, MAX_POS);
+    degrees = constrain(target, MIN_POS, MAX_POS);
+    myServo.write(degrees);
+    return degrees;
+}
+
+int move_percent(int percent)
+{
+    return move(100 - map(percent, 0, 100, MIN_POS, MAX_POS));
+}
+
+void start_engine()
+{
+
+    current_state = STARTING;
+    Serial.println("Starting!");
+
+    move_percent(30);
+    // enable fuel
+    bl_fuel_on = true;
+    digitalWrite(PIN_FUEL, true);
+    // delay to allow time for fuel to move through the system
+    for (int c = 0; c < 5; c++)
+    {
+        digitalWrite(LED_BUILTIN, true);
+        delay(250);
+        digitalWrite(LED_BUILTIN, false);
+    }
+
+    // Turn on starter motor
+    digitalWrite(PIN_START, true);
+
+    // wait two seconds
+    digitalWrite(LED_BUILTIN, true);
+    delay(2000);
+    digitalWrite(LED_BUILTIN, false);
+
+    // turn off starter motor
+    digitalWrite(PIN_START, false);
 }
