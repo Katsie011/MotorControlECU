@@ -7,11 +7,27 @@
 // Create a Servo object to control a servo motor
 Servo myServo;
 
+// PIN MAP
+#define PIN_SERVO A0
+#define PIN_START PIN0
+#define PIN_FUEL PIN1
+
 // Global variables
 int degrees = MIN_POS;   // Variable to store new position for the servo
 bool led_status = false; // LED status flag
 String data = "";        // String to store data from serial input
 String command = "";     // String to store command from serial input
+
+// STATES
+bool bl_fuel_on = true;
+enum state
+{
+    OFF = 0,
+    ON = 1,
+    FUEL = 2,
+    STARTING = 3,
+};
+state current_state = OFF;
 
 // Function declarations
 void help();
@@ -23,12 +39,15 @@ void setup()
     // Set the built-in LED pin as an output
     pinMode(LED_BUILTIN, OUTPUT);
 
+    pinMode(PIN_START, OUTPUT);
+    pinMode(PIN_FUEL, OUTPUT);
+
     // Initialize serial communication at 9600 bits per second
     Serial.begin(9600);
     Serial.println("Setting up");
 
     // Attach the servo on pin A0 to the servo object
-    myServo.attach(A0);
+    myServo.attach(PIN_SERVO);
 
     sweep(MIN_POS, MAX_POS);
 
@@ -90,6 +109,30 @@ void loop()
         if (command == "START")
         {
             Serial.println("Running!");
+
+            // TODO Complete this.
+            current_state = STARTING;
+
+            // enable fuel
+            bl_fuel_on = true;
+            digitalWrite(PIN_FUEL, true);
+
+            // Turn on starter motor
+            digitalWrite(PIN_START, true);
+
+            // wait two seconds
+            digitalWrite(LED_BUILTIN, true);
+            delay(2000);
+            digitalWrite(LED_BUILTIN, false);
+
+            // turn off starter motor
+            digitalWrite(PIN_START, false);
+        }
+        else if (command == "FUEL")
+        {
+            bl_fuel_on = !bl_fuel_on;
+            Serial.print("Fuel status is: ");
+            Serial.println(bl_fuel_on);
         }
         else if (command.startsWith("MOVE") && degrees >= 0)
         {
