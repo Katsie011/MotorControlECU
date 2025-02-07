@@ -1,12 +1,7 @@
 {
-	"folders": [
-		{
-			"path": "../../ThrottleController"
-		},
-		{
-			"name": "Servo Test",
-			"path": ".."
-		}
-	],
-	"settings": {}
+    "folders": [
+        {
+            "path": "../../Servo Throttle"
+        }
+    ]
 }
