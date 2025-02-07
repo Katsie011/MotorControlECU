@@ -41,21 +41,22 @@ namespace Engine
         }
     }
 
-    void flash_pin(int pin, int times, int duration)
-    {
+    void flash_pin(int pin, int times, int total_duration_ms)
+    {   
+        int delay_time = total_duration_ms/times/2;
         // TODO change this to not use a delay
         for (int i = 0; i <= times; i++)
         {
             digitalWrite(LED_BUILTIN, true);
             digitalWrite(pin, true);
-            delay(duration/2);
+            delay(delay_time);
 
             digitalWrite(LED_BUILTIN, false);
             digitalWrite(pin, false);
             // delay if not the last flash
             if (i != times)
             {
-                delay(duration/2);
+                delay(delay_time);
             }
         }
     }
@@ -99,12 +100,12 @@ namespace Engine
 
         // delay to allow time for fuel to move through the system
         Serial.println("\tPriming fuel");
-        flash_pin(PIN_AUX_INDICATOR, 15, 100);
+        flash_pin(PIN_AUX_INDICATOR, 15, FUEL_PRIME_TIME_MS);
 
         // wait 1.5 seconds
         digitalWrite(PIN_START, true); // starter on
         Serial.println("\tStarter ON");
-        flash_pin(PIN_AUX_INDICATOR, 3, 500);
+        flash_pin(PIN_AUX_INDICATOR, 5, START_TIME_MS);
         // turn off starter motor
         digitalWrite(PIN_START, false); //starter off
         Serial.println("\tStarter OFF");
@@ -114,7 +115,7 @@ namespace Engine
         Serial.println("\tBack to idle");
         Engine::move_percent(IDLE_PERCENT);
         Serial.println("\tWait a little for the engine to settle");
-        flash_pin(PIN_AUX_INDICATOR, 4, 250);
+        flash_pin(PIN_AUX_INDICATOR, 4, 1000);
         Serial.println("\tDone!");
     }
 
@@ -128,7 +129,7 @@ namespace Engine
         current_state = OFF;
 
         Serial.println("\tWaiting...");
-        flash_pin(PIN_AUX_INDICATOR, 15, 100);
+        flash_pin(PIN_AUX_INDICATOR, 15, 1500);
         Serial.println("\tDone!");
     }
 }

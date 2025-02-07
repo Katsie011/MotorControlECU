@@ -14,7 +14,7 @@ namespace Engine
 
     // Function declarations
     void setup(int pin);
-    void flash_pin(int pin, int times, int duration);
+    void flash_pin(int pin, int times, int total_duration_ms);
     void sweep_percent(int bottom, int top);
     int move(int target);
     int move_percent(int percent);

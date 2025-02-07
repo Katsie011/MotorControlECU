@@ -17,4 +17,7 @@
 #define MIN_POS 0
 #define IDLE_PERCENT 40
 
+#define START_TIME_MS 1500 
+#define FUEL_PRIME_TIME_MS 1000 
+
 #endif //SETTINGS_H
