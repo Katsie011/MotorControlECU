@@ -1,0 +1,20 @@
+#ifndef SETTINGS_H
+#define SETTINGS_H
+#include <Arduino.h>
+#include <Servo.h>
+
+#define BAUD_RATE 9600
+
+// PIN MAP
+#define PIN_SERVO PIN_A0
+#define PIN_START PIN2
+#define PIN_FUEL PIN3
+#define PIN_AUX_INDICATOR PIN4
+
+
+// ENGINE SETTINGS:
+#define MAX_POS 90
+#define MIN_POS 0
+#define IDLE_PERCENT 40
+
+#endif //SETTINGS_H
