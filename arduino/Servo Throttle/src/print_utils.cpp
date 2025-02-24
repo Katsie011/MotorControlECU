@@ -10,8 +10,12 @@ namespace printUtils
         Serial.println();
         Serial.println("Available commands:");
         Serial.println("START - Begin operation");
-        Serial.println("MOVE: <position> - Move servo to specified position (0-180)");
-        Serial.println("FLASH - Flash the LED twice");
+        Serial.println("FUEL - Toggle Fuel State (ON/OFF)");
+        Serial.println("MOVE: <position> - Move servo to specified position (min pos - max pos)");
+        Serial.println("SWEEP - Sweep the throttle from min to max position");
+        Serial.println("FLASH - Flash the Arduino Builtin LED twice to test");
+        Serial.println("STATE - Report current open loop engine state");
+        Serial.println("UMOVE: <position> - UNSAFE Move servo to specified position (0-180)");
     }
 
     // Function to print a separator bar
