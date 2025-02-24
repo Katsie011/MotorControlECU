@@ -33,7 +33,11 @@ setup () {
     esac
 
     echo "Installing wiringPi"
-    sudo apt-get install wiringpi || { echo "Failed to install wiringPi!" && return 1; }
+    # sudo apt-get install wiringpi || { echo "Failed to install wiringPi!" && return 1; }
+    sudo apt install -y git
+    git clone https://github.com/WiringPi/WiringPi
+    cd WiringPi
+    ./build
 
     echo "Validating wiringPi installation"
     gpio -v || { echo "wiringPi installation validation failed!" && return 1; }

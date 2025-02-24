@@ -11,3 +11,34 @@ Tasks for the controller
   - [ ] Increase ICE speed
   - [ ] Increase torque, being careful to not stall the motor. 
   - [ ] Initally use PID, later work with MPC. Bonus points if we can use DL
+
+
+# Setup:
+A great resource and al in one builder for the docker containers we need is here:  https://learnembeddedsystems.co.uk/easy-raspberry-pi-iot-server
+
+Create the database: 
+``` bash
+docker exec -it influxdb influx
+CREATE DATABASE REX
+quit
+```
+
+# Test Influx install:
+``` bash
+curl -i -XPOST 'http://4qtrexpi.local:8086/write?db=REX' --data-binary 'test,tag1=web_test,tag_n=post value=0.3'
+
+```
+
+Check the value was inserted with:
+``` bash
+docker exec -it influxdb influx
+USE REX
+show measurements
+```
+
+# Loging into Grafana:
+```bash
+http://4qtrexpi.home:3000/login 
+# or 
+http://4qtrexpi.local:3000/login
+```
