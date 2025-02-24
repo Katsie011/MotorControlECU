@@ -92,7 +92,9 @@ void loop()
             Serial.print("Fuel status is now: ");
             Serial.println(Engine::toggle_fuel());
         }
-        else if (command.startsWith("MOVE") && degrees >= 0)
+        else if ((command.startsWith("MOVE") ||
+                  command.equals("M")) &&
+                 degrees >= 0)
         {
             // Convert data to an integer and constrain it between 0 and 180
             degrees = Engine::move_percent(degrees);
@@ -130,7 +132,7 @@ void loop()
         else if (command == "STATE")
         {
             // TODO this returns a number for now. Need to convert the number to text.
-            
+
             Serial.print("Current engine status is: ");
             Serial.println(Engine::get_engine_state());
         }

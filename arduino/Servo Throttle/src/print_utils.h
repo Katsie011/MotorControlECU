@@ -5,6 +5,7 @@ namespace printUtils {
     // Forward declare the functions
     void print_help();
     void print_bar();
+    void print_line();
 }
 
 #endif //PRINT_HELPER_H
