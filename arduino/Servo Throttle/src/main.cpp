@@ -104,7 +104,9 @@ void loop()
             Serial.println(degrees);
             degrees = -1;
         }
-        else if (command.startsWith("UMOVE") && degrees >= 0)
+        else if ((command.startsWith("UMOVE") ||
+                  command.equals("M")) &&
+                 degrees >= 0)
         {
             // Unsafe move!
             degrees = Engine::unconstrained_move(degrees);

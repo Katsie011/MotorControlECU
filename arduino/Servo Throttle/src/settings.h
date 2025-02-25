@@ -7,8 +7,8 @@
 
 // PIN MAP
 #define PIN_SERVO PIN_A0
-#define PIN_START PIN2
-#define PIN_FUEL PIN3
+#define PIN_START PIN3
+#define PIN_FUEL PIN2   
 #define PIN_AUX_INDICATOR PIN4
 
 
