@@ -1,8 +1,11 @@
----
-title: Steps to create device
----
+<!-- # Quick info
+If you have a system that is already set up it will have:
+- Two raspberry pis that are connected via a CAN Bus.  -->
 
-# Raspberry Pi
+
+# Steps to create device
+
+## Raspberry Pi
 
 ## Setup Access Point if not connected to internet
 Based on this article: `https://raspberrypi.stackexchange.com/questions/100195/automatically-create-hotspot-if-no-network-is-available`
@@ -12,7 +15,7 @@ Copy the relevant file from this folder into `/etc/wpa_supplicant/wpa_supplicant
 
 
 
-# install wiringPi
+## install wiringPi
 
 <!-- 
 ``` bash
@@ -35,7 +38,7 @@ validate install with
 gpio -v
 ```
 
-# Installing python can tools
+### Installing python can tools
 ```bash
 sudo apt-get update
 sudo apt-get install -y python3-serial python3-can
@@ -43,7 +46,7 @@ sudo apt-get install -y python3-serial python3-can
 
 
 
-# Setting up the can interface with the network:
+### Setting up the can interface with the network:
 
 `sudo  /boot/config.txt` <<
 ```
@@ -73,3 +76,6 @@ Install the can utils
 ```bash
 sudo apt-get install can-utils
 ```
+
+
+
