@@ -15,7 +15,7 @@
 // ENGINE SETTINGS:
 #define MAX_POS 90
 #define MIN_POS 0
-#define IDLE_PERCENT 75
+#define IDLE_PERCENT 76
 
 #define START_TIME_MS 1500 
 #define FUEL_PRIME_TIME_MS 1000 
