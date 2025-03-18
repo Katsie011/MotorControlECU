@@ -76,7 +76,21 @@ namespace Engine
     }
     int move_percent(int percent)
     {
-        return move(100 - map(percent, 0, 100, MIN_POS, MAX_POS));
+        // safety check to make sure percent is 0 - 100
+        if (percent<0){
+            percent = 0;
+        } else if (percent > 100)
+        {
+            percent = 100;
+        }
+
+        // invert percent because throttle spins in reverse
+        int throttle_pos  = 100-percent;
+
+        // 0-100 needs to map to min - max pos
+        return map(throttle_pos, 0,100,MIN_POS, MAX_POS); //TODO: this might not work!! CHECK!
+        
+        // return move(100 - map(percent, 0, 100, MIN_POS, MAX_POS));
     }
 
     bool toggle_fuel()

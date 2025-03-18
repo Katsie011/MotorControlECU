@@ -97,12 +97,17 @@ void loop()
                  degrees >= 0)
         {
             // Convert data to an integer and constrain it between 0 and 180
-            degrees = Engine::move_percent(degrees);
+            Engine::move_percent(degrees);
             digitalWrite(LED_BUILTIN, led_status);
             led_status = !led_status;
-            Serial.print("Moved to: ");
-            Serial.println(degrees);
+            Serial.print("🏃 Moved to: ");
+            Serial.print(degrees);
+            Serial.println(" degrees");
             degrees = -1;
+        }
+        else if (command.startsWith("IDLE") || command.equals("I"))
+        {
+            Engine::move_percent(IDLE_PERCENT);
         }
         else if ((command.startsWith("UMOVE") ||
                   command.equals("M")) &&
@@ -112,8 +117,9 @@ void loop()
             degrees = Engine::unconstrained_move(degrees);
             digitalWrite(LED_BUILTIN, led_status);
             led_status = !led_status;
-            Serial.print("Moved to: ");
-            Serial.println(degrees);
+            Serial.print("🚧 Moved to: ");
+            Serial.print(degrees);
+            Serial.println(" degrees");
             degrees = -1;
         }
         else if (command == "FLASH")
