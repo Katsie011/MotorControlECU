@@ -88,8 +88,8 @@ namespace Engine
         int throttle_pos  = 100-percent;
 
         // 0-100 needs to map to min - max pos
-        return map(throttle_pos, 0,100,MIN_POS, MAX_POS); //TODO: this might not work!! CHECK!
-        
+        int new_pos = map(throttle_pos, 0,100,MIN_POS, MAX_POS); //TODO: this might not work!! CHECK!
+        return move(new_pos);
         // return move(100 - map(percent, 0, 100, MIN_POS, MAX_POS));
     }
 
