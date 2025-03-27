@@ -83,7 +83,8 @@ void loop()
         {
             Engine::start_engine();
         }
-        else if (command == "STOP")
+        else if (command.startsWith("STOP") || 
+                command.equals("S"))
         {
             Engine::stop_engine();
         }
@@ -92,12 +93,12 @@ void loop()
             Serial.print("Fuel status is now: ");
             Serial.println(Engine::toggle_fuel());
         }
-        else if ((command.startsWith("MOVE") ||
+        else if ((command.startsWith("MOVE") ||  
                   command.equals("M")) &&
                  degrees >= 0)
         {
             // Convert data to an integer and constrain it between 0 and 180
-            Engine::move_percent(degrees);
+            degrees= Engine::move_percent(degrees);
             digitalWrite(LED_BUILTIN, led_status);
             led_status = !led_status;
             Serial.print("🏃 Moved to: ");
@@ -107,7 +108,8 @@ void loop()
         }
         else if (command.startsWith("IDLE") || command.equals("I"))
         {
-            Engine::move_percent(IDLE_PERCENT);
+           Engine::move_percent(IDLE_PERCENT);
+
         }
         else if ((command.startsWith("UMOVE") ||
                   command.equals("M")) &&
