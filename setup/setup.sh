@@ -26,7 +26,7 @@ setup_bullseye() {
 setup_bookworm() {
     echo "Appending CAN configuration to /boot/firmware/config.txt"
     echo "dtparam=spi=on" | sudo tee -a /boot/firmware/config.txt || { echo "Failed to append dtparam!" && return 1; }
-    echo "dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=25,spimaxfrequency=2000000" | sudo tee -a /boot/config.txt || { echo "Failed to append dtoverlay!" && return 1; }
+    echo "dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=25,spimaxfrequency=2000000" | sudo tee -a /boot/firmware/config.txt || { echo "Failed to append dtoverlay!" && return 1; }
 }
     
 setup () {
