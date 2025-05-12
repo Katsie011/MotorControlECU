@@ -64,7 +64,9 @@ setup () {
     sudo apt-get update || { echo "Failed to update package list!" && return 1; }
     sudo apt-get install python3-serial || { echo "Failed to install python3-serial!" && return 1; }
     sudo apt-get install python3-can || { echo "Failed to install python3-can!" && return 1; }
+    sudo apt-get install can-utils || { echo "Failed to install can-utils!" && return 1; }
 
+    
     # Extract the version name from /etc/os-release
     VERSION_CODENAME=$(grep VERSION_CODENAME /etc/os-release | cut -d= -f2)
     
