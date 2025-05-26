@@ -1,6 +1,7 @@
 # pip install can-j1939
 import logging
 import time
+from typing import Literal
 import can
 import j1939
 
@@ -27,15 +28,29 @@ ca = j1939.ControllerApplication(name, 128)
 
 def to_little_endian(data: int):
     """Convert an integer to a little endian byte array.
-
     Args:
         data (int): The integer to convert
-
     Returns:
         bytearray: Little endian representation of the integer
     """
     # Convert to bytes in little endian format
     return bytearray(data.to_bytes((data.bit_length() + 7) // 8, byteorder="little"))
+
+
+def hex_to_decimal(
+    hex_byte: int, byteorder: Literal["little", "big"] = "little", signed: bool = False
+) -> int:
+    """Convert a hex byte to decimal using Intel byte ordering (little endian).
+
+    Args:
+        hex_byte (int): The hex byte to convert
+
+    Returns:
+        int: The decimal value
+    """
+    # Convert to bytes in little endian format and unpack as unsigned char
+    return int.from_bytes(bytes([hex_byte]), byteorder=byteorder, signed=signed)
+    # return eval("0b" + '{0:08b}'.format(hex_byte)[::-1][:-2])
 
 
 def ca_receive(priority, pgn, source, timestamp, data):
