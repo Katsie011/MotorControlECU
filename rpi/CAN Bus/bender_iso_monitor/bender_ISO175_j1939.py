@@ -1,6 +1,7 @@
 import can
 import struct
 
+
 # Source Address of iso175 device (per manual)
 # This is a fixed address for the Bender ISO175 device
 ISO175_SA = 0xF4
@@ -21,32 +22,35 @@ def decode_pgn_65281(data):
     print("Received a message for PGN 65281 - PGN_Info_General")
 
     # Unpack 16-bit values using little-endian format (<H)
-    r_iso_corr = struct.unpack_from("<H", data, 0)[0]  # Corrected isolation resistance
+    r_iso_corr = struct.unpack_from("<H", data[:2])[0]  # Corrected isolation resistance
     r_iso_status = data[2]  # Status byte for isolation measurement
     meas_count = data[3]  # Counter for measurements
-    alarms = data[4]  # Bitfield containing alarm states
-    device_state = data[5]  # Current state of the device
+    alarms = struct.unpack_from("<H", data[4:6])[0]  # Bitfield containing alarm states
+    device_state = data[6]  # Current state of the device
 
     print("\n[PGN 65281 - General Info]")
-    """
-r_iso_status:
-    0xFC: estimated iso-lation value during startup
-    0xFD: first measured isolation value during startup
-    0xFE: isolation value in normal operation
-    0xFF: SNV
-"""
+
+    r_iso_status_meaning = {
+        0xFC: "estimated isolation value during startup",
+        0xFD: "first measured isolation value during startup",
+        0xFE: "isolation value in normal operation",
+        0xFF: "SNV",
+    }.get(r_iso_status, "unknown status")
+
     print(
         f"  R_iso_corrected: {r_iso_corr} kΩ"
         if r_iso_corr != 0xFFFF
         else "  R_iso_corrected: SNV"
     )
-    print(f"  R_iso_status: 0x{r_iso_status:02X}")
+    print(
+        f"  R_iso_status: 0x{r_iso_status:02X} \t\t\t - meaning:\t{r_iso_status_meaning}"
+    )
     print(f"  Measurement Counter: {meas_count}")
     print(f"  Alarms Bitfield: 0x{alarms:02X}")
 
     # Device states: 0=Init, 1=Normal, 2=SelfTest
     print(
-        f"  Device State: {device_state} ({['Init', 'Normal', 'SelfTest'][device_state] if device_state < 3 else 'Unknown'})"
+        f"  Device State: {device_state} \t\t\t - meaning:\t({['Init', 'Normal', 'SelfTest'][device_state] if device_state < 3 else 'Unknown'})"
     )
 
 
