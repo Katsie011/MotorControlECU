@@ -1,0 +1,14 @@
+Command Name,Index,Length,Endian,Scale,Offset,Unit,Enum,Default,Description
+Unbalance Threshold,0x2F,2,little,1,0,%,0 = off; 5–45 = threshold,0,Set unbalance alarm threshold
+Self-holding Iso-Alarm Activation,0x31,2,little,1,0,,0xFC = auto reset; 0xFD = self-holding,0xFC,Whether Iso-Alarm must be manually reset
+Isolation Active Profile,0x39,2,little,1,0,,0: Custom; 1: Std Fast; 2: Std; 3: High Fast; 4: High; 5: Disturbed; 6: Service; 7: UG,1,Controls isolation profile used during operation
+Isolation Power-On Profile,0x3B,2,little,1,0,,Same as above,1,Profile used at power-up
+Isolation Threshold Error,0x47,3,little,1,0,kΩ,,100,Sets error threshold for insulation resistance
+Threshold Timeout Measurement,0x49,3,little,1,0,s,,60,Time before isolation alarm triggers
+Threshold Warning,0x4B,3,little,1,0,kΩ,,500,Warning threshold for insulation resistance
+Self Test Period,0x59,3,little,10,0,s,,360,Period between self tests (e.g., 360 = 1 hour)
+Voltage Mode,0x65,2,little,1,0,,0xFC = AC+DC; 0xFD = AC; 0xFE = DC,0xFE,Set measurement mode
+Undervoltage Threshold,0x67,3,little,1,0,V,,0,Set low-voltage alarm threshold
+Write Lock Status,0x6B,2,little,1,0,,0xFC = Write Enable; 0xFD = Disable,0xFC,Enable/disable write access
+Estimation Reference Voltage,0x73,3,little,1,0,V,,100,Voltage to trigger reference estimation
+Pre-estimation Max Difference,0x75,3,little,0.01,0,V,,200,Allowed voltage fluctuation during estimation
